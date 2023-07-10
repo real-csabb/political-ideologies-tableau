@@ -1,3 +1,4 @@
+import json
 import googleapiclient
 import os
 from csv import reader
@@ -12,12 +13,10 @@ from requests import get
 scopes = ["https://www.googleapis.com/auth/drive",
           "https://www.googleapis.com/auth/drive.file",
           "https://www.googleapis.com/auth/spreadsheets"]
-secret_file = os.path.join(os.getcwd(), 'client_secret.json')
-secret_url = open('url_secret.txt')
-spreadsheet_id = secret_url.read().rstrip()
-secret_url.close()
+secret_file = json.loads(os.environ.get('GOOGLE_AUTHENTICATION_CREDENTIALS'))
+spreadsheet_id = os.environ.get('GOOGLE_SPREADSHEET_URL')
 
-credentials = service_account.Credentials.from_service_account_file(secret_file, scopes=scopes)
+credentials = service_account.Credentials.from_service_account_info(secret_file, scopes=scopes)
 service = discovery.build('sheets', 'v4', credentials=credentials)
 
 def main():
@@ -39,12 +38,12 @@ def main():
         current_congress_dne = False
         while int(result) != hs_code:
             # update the request to be current
+            sheet_row_num += 1
             current = update_row(sheet_row_num)
             request = update_getter(current)
 
             try:  # while not current Congress, get next row's Congress ID
                 result = request.execute()['values'][0][0]
-                sheet_row_num += 1
 
             except:  # current Congress does not exist in database (googleapiclient.errors.HttpError)
                 current_congress_dne = True  # and would throw an HttpError if we tried to access it
@@ -56,12 +55,17 @@ def main():
             current_row = update_row(sheet_row_num)
             row_data = update_body(current_row, row)  # like {'range': int, 'majorDimension': 'ROWS', 'values': list}
 
-            if current_congress_dne:  # Appends new Congress to database
-                request = update_append(current_row, row_data)
-                request = request.execute()
+            try:
+                if current_congress_dne:  # Appends new Congress to database
+                    request = update_append(current_row, row_data)
+                    request = request.execute()
 
-            else:  # Update Congress
-                request = update_squared(current_row, row_data)
+                else:  # Update Congress
+                    request = update_squared(current_row, row_data)
+                    request = request.execute()
+            except: # Runs where database data is incomplete
+                current_congress_dne = True
+                request = update_append(current_row, row_data)
                 request = request.execute()
 
             sheet_row_num += 1  # Update row
