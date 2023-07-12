@@ -10,6 +10,6 @@ I originally orchestrated [this project on Obsevable](https://observablehq.com/d
 ## How to Setup 
 Some prerequisites for this is to enable a service account in GCP and to create a Google Spreadsheets database in Google Drive. [Clare Gibson's similar implementation in R](https://github.com/clarelgibson/tableau-public-autorefresh/wiki/2.-Set-up-GCP-services) was invaluable in setting these things up.
 
-After that, simply clone this repository and add your Google authentication JSON and your Spreadsheet ID (e.g in https://docs.google.com/spreadsheets/d/1ITH6oNHsIlVHo2LJnR92wP5LEKiON0k2rZJ82YbYaB0/, the 1ITH6oNHsIlVHo2LJnR92wP5LEKiON0k2rZJ82YbYaB0) to your repostiory secrets. Then pull your repository down, activate the virtual environment in venv/bin/activate, and run `$ pip install -r requirements.txt`. 
+After that, simply clone this repository and add your Google authentication JSON and your Spreadsheet ID (e.g in https://docs.google.com/spreadsheets/d/1ITH6oNHsIlVHo2LJnR92wP5LEKiON0k2rZJ82YbYaB0/, the 1ITH6oNHsIlVHo2LJnR92wP5LEKiON0k2rZJ82YbYaB0) to your repostiory secrets. Then pull your repository down, activate a virtual environment, and run `$ pip install -r requirements.txt`. 
 
 After that, it's just a matter of running the Python script and watching your Google Spreadsheet database update!
