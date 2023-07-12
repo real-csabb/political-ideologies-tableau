@@ -51,7 +51,7 @@ def main():
 
         # Finally update the database
         for row in rows:
-            sleep(1)  # I'm a poor college student therefore I'm using a free GCP account
+            sleep(1.5)  # I'm a poor college student therefore I'm using a free GCP account
             current_row = update_row(sheet_row_num)
             row_data = update_body(current_row, row)  # like {'range': int, 'majorDimension': 'ROWS', 'values': list}
 
