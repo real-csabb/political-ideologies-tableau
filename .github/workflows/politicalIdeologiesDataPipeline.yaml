@@ -33,4 +33,4 @@ jobs:
 
       - name: Run Data Pipeline
         run: |
-          python3 political-ideologies-tableau.py
+          political_ideologies_tableau.py
