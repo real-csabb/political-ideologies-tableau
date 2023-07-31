@@ -1,2 +1,4 @@
 client_secret.json
 ./venv
+./.github/.DS_Store
+testing.ipynb
